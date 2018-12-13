@@ -26,34 +26,43 @@ var getLikesNumber = function () {
 var getUserAvatar = function () {
   var avatarLink = 'img/avatar-' + randomNumber(1, 6) + '.svg';
   return avatarLink;
-}
+};
+
+// функция которая перебирает массив данных и возвращает случайное значение
+var getRandomArrayValue = function (arrayName, indexArrayElement) {
+  var getValue = arrayName[indexArrayElement];
+  return getValue;
+};
+
+// массив с вариантами комментариев фотографий
+var usersCommentsText = [
+  'Всё отлично!',
+  'В целом всё неплохо. Но не всё.',
+  'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
+  'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
+  'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
+  'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
+];
 
 // функция создания случайного текста комментария
 var getUserCommentText = function () {
-  var usersCommentsText = [
-    'Всё отлично!',
-    'В целом всё неплохо. Но не всё.',
-    'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
-    'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
-    'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
-    'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
-  ];
-  var userCommentText = usersCommentsText[randomNumber(0, 5)];
+  var userCommentText = getRandomArrayValue(usersCommentsText, randomNumber(0, 5));
   return userCommentText;
 };
 
-// функция создания случайного имени автора комментария
+// массив авторов комментария
+var usersNameArray = [
+  'Артем',
+  'Антон',
+  'Егор',
+  'Ирина',
+  'Иван',
+  'Наталья'
+];
 
+// функция создания случайного имени автора комментария
 var getUserName = function () {
-  var usersNameArray = [
-    'Артем',
-    'Антон',
-    'Егор',
-    'Ирина',
-    'Иван',
-    'Наталья'
-  ];
-  var userNameBox = usersNameArray[randomNumber(0, 5)];
+  var userNameBox = getRandomArrayValue(usersNameArray, randomNumber(0, 5));
   return userNameBox;
 };
 
@@ -80,12 +89,8 @@ var getPhotoDescription = function (countLink1) {
 // функция создания массива объектов описания фотографий
 var createCommentsArray = function () {
   var usersComments = [];
-  var arrayIndex = 0;
-  var linkIndex = 1;
-  for (var i = 25; 0 < i; i--) {
-    usersComments[arrayIndex] = getPhotoDescription(linkIndex);
-    arrayIndex++;
-    linkIndex++;
+  for (var i = 0; i < 25 ; i++) {
+    usersComments[i] = getPhotoDescription(i + 1);
   };
   return usersComments;
 };
