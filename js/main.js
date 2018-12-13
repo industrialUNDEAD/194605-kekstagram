@@ -95,6 +95,31 @@ var createCommentsArray = function () {
   return usersComments;
 };
 
+//-------------2-я часть задания--------------------
+
+var commentsArray = createCommentsArray();
+var pictureTemplate = document.querySelector('#picture');
+
+var fragment = document.createDocumentFragment();
+
+// функция создания DOM-элемента фотографий
+var createHtmlNode = function (arrayData) {
+  for (var i = 0; i < arrayData.length; i++) {
+    var newNode = document.createElement('div');
+    newNode = pictureTemplate.cloneNode(true);
+    newNode.content.querySelector('.picture__img').src = arrayData[i].url;
+    newNode.content.querySelector('.picture__likes').textContent = arrayData[i].likes;
+    newNode.content.querySelector('.picture__comments').textContent = arrayData[i].comments.message;
+    fragment.appendChild(newNode.content);
+  };
+  return fragment;
+};
+var insertElements = createHtmlNode(commentsArray);
+// var test = insertElements.content;
+
+//-----------------------3-я часть задания-----------------------------
+
 debugger;
-var test = createCommentsArray();
-console.log(test);
+var photoCommentContainer = document.querySelector('.pictures');
+photoCommentContainer.appendChild(insertElements);
+console.log(photoCommentContainer);
