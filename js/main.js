@@ -122,4 +122,24 @@ var insertElements = createHtmlNode(commentsArray);
 debugger;
 var photoCommentContainer = document.querySelector('.pictures');
 photoCommentContainer.appendChild(insertElements);
-console.log(photoCommentContainer);
+
+//----------------------4-я часть задания------------------------------
+
+var showBigPicture = function () {
+  var bigPicture = document.querySelector('.big-picture');
+  bigPicture.classList.remove('hidden');
+  bigPicture.querySelector('.big-picture__img').src = commentsArray[0].url;
+  bigPicture.querySelector('.likes-count').textContent = commentsArray[0].likes;
+  bigPicture.querySelector('.comments-count').textContent = 1;
+  bigPicture.querySelector('.social__picture').src = 'img/avatar-' +
+  randomNumber(1, 6) + '.svg';
+  bigPicture.querySelector('.social__text').textContent = commentsArray[0].comments.message;
+  bigPicture.querySelector('.social__caption').textContent = 'Описание фотографии';
+  console.log(commentsArray[0].comments);
+};
+var picture = showBigPicture();
+
+//------------------------5-я часть задания-----------------------------
+
+var countCommentElement = document.querySelector('.social__comment-count').classList.add('visually-hidden');
+var commentLoaderElement = document.querySelector('.comments-loader').classList.add('visually-hidden');
