@@ -1,9 +1,9 @@
 'use strict';
 // функция создающая случайное число
 var randomNumber = function (minValue, maxValue) {
-  var numberBox = Math.floor(Math.random( ) * (maxValue - minValue + 1)) + minValue;
+  var numberBox = Math.floor(Math.random() * (maxValue - minValue + 1)) + minValue;
   return numberBox;
-}
+};
 
 // фнкция создающая ссылку на фотографию
 var getPictureLink = function (countLink) {
@@ -12,7 +12,7 @@ var getPictureLink = function (countLink) {
   for (var i = 1; countLink >= i; i++) {
     pictureNumber = i;
     pictureAdress = 'photos/' + pictureNumber + '.jpg';
-  };
+  }
   return pictureAdress;
 };
 
@@ -89,13 +89,13 @@ var getPhotoDescription = function (countLink1) {
 // функция создания массива объектов описания фотографий
 var createCommentsArray = function () {
   var usersComments = [];
-  for (var i = 0; i < 25 ; i++) {
+  for (var i = 0; i < 25; i++) {
     usersComments[i] = getPhotoDescription(i + 1);
-  };
+  }
   return usersComments;
 };
 
-//-------------2-я часть задания--------------------
+// -------------2-я часть задания--------------------
 
 var commentsArray = createCommentsArray();
 var pictureTemplate = document.querySelector('#picture');
@@ -111,35 +111,38 @@ var createHtmlNode = function (arrayData) {
     newNode.content.querySelector('.picture__likes').textContent = arrayData[i].likes;
     newNode.content.querySelector('.picture__comments').textContent = arrayData[i].comments.message;
     fragment.appendChild(newNode.content);
-  };
+  }
   return fragment;
 };
 var insertElements = createHtmlNode(commentsArray);
 // var test = insertElements.content;
 
-//-----------------------3-я часть задания-----------------------------
+// -----------------------3-я часть задания-----------------------------
 
-debugger;
 var photoCommentContainer = document.querySelector('.pictures');
 photoCommentContainer.appendChild(insertElements);
 
-//----------------------4-я часть задания------------------------------
+// ----------------------4-я часть задания------------------------------
 
 var showBigPicture = function () {
   var bigPicture = document.querySelector('.big-picture');
   bigPicture.classList.remove('hidden');
   bigPicture.querySelector('.big-picture__img').src = commentsArray[0].url;
   bigPicture.querySelector('.likes-count').textContent = commentsArray[0].likes;
-  bigPicture.querySelector('.comments-count').textContent = 1;
+  bigPicture.querySelector('.comments-count').textContent = 1; // как я понял, здесь нужно просто встявить своё кол-во комментов
   bigPicture.querySelector('.social__picture').src = 'img/avatar-' +
   randomNumber(1, 6) + '.svg';
   bigPicture.querySelector('.social__text').textContent = commentsArray[0].comments.message;
-  bigPicture.querySelector('.social__caption').textContent = 'Описание фотографии';
-  console.log(commentsArray[0].comments);
+  bigPicture.querySelector('.social__caption').textContent = 'Описание фотографии'; // как я понял, описание фотографии потом будет приходить с сервера., а пока подсказали так сделать.
 };
-var picture = showBigPicture();
+showBigPicture();
 
-//------------------------5-я часть задания-----------------------------
+// ------------------------5-я часть задания-----------------------------
 
-var countCommentElement = document.querySelector('.social__comment-count').classList.add('visually-hidden');
-var commentLoaderElement = document.querySelector('.comments-loader').classList.add('visually-hidden');
+var hiddenDomElements = function () {
+  var hiddenElement = document.querySelector('.social__comment-count').classList.add('visually-hidden');
+  hiddenElement = document.querySelector('.comments-loader').classList.add('visually-hidden');
+  return hiddenElement;
+};
+
+hiddenDomElements();
