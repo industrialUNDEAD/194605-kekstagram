@@ -115,7 +115,6 @@ var createHtmlNode = function (arrayData) {
   return fragment;
 };
 var insertElements = createHtmlNode(commentsArray);
-// var test = insertElements.content;
 
 // -----------------------3-я часть задания-----------------------------
 
