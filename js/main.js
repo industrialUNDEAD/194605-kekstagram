@@ -1,4 +1,24 @@
 'use strict';
+// массив с вариантами комментариев фотографий
+var USERS_COMMENTS_TEXT = [ // сделать константой
+  'Всё отлично!',
+  'В целом всё неплохо. Но не всё.',
+  'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
+  'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
+  'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
+  'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
+];
+
+// массив авторов комментария
+var USERS_NAME_ARRAY = [
+  'Артем',
+  'Антон',
+  'Егор',
+  'Ирина',
+  'Иван',
+  'Наталья'
+];
+
 // функция создающая случайное число
 var randomNumber = function (minValue, maxValue) {
   var numberBox = Math.floor(Math.random() * (maxValue - minValue + 1)) + minValue;
@@ -7,11 +27,9 @@ var randomNumber = function (minValue, maxValue) {
 
 // фнкция создающая ссылку на фотографию
 var getPictureLink = function (countLink) {
-  var pictureNumber = 0;
   var pictureAdress = 0;
-  for (var i = 1; countLink >= i; i++) {
-    pictureNumber = i;
-    pictureAdress = 'photos/' + pictureNumber + '.jpg';
+  for (var i = 1; i <= countLink; i++) {
+    pictureAdress = 'photos/' + i + '.jpg';
   }
   return pictureAdress;
 };
@@ -29,40 +47,20 @@ var getUserAvatar = function () {
 };
 
 // функция которая перебирает массив данных и возвращает случайное значение
-var getRandomArrayValue = function (arrayName, indexArrayElement) {
-  var getValue = arrayName[indexArrayElement];
+var getRandomArrayValue = function (arrayName) {
+  var getValue = arrayName[randomNumber(0, 5)]; // должна считать случайное число
   return getValue;
 };
 
-// массив с вариантами комментариев фотографий
-var usersCommentsText = [
-  'Всё отлично!',
-  'В целом всё неплохо. Но не всё.',
-  'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
-  'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
-  'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
-  'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
-];
-
 // функция создания случайного текста комментария
 var getUserCommentText = function () {
-  var userCommentText = getRandomArrayValue(usersCommentsText, randomNumber(0, 5));
+  var userCommentText = getRandomArrayValue(USERS_COMMENTS_TEXT);
   return userCommentText;
 };
 
-// массив авторов комментария
-var usersNameArray = [
-  'Артем',
-  'Антон',
-  'Егор',
-  'Ирина',
-  'Иван',
-  'Наталья'
-];
-
 // функция создания случайного имени автора комментария
 var getUserName = function () {
-  var userNameBox = getRandomArrayValue(usersNameArray, randomNumber(0, 5));
+  var userNameBox = getRandomArrayValue(USERS_NAME_ARRAY);
   return userNameBox;
 };
 
@@ -98,19 +96,18 @@ var createCommentsArray = function () {
 // -------------2-я часть задания--------------------
 
 var commentsArray = createCommentsArray();
-var pictureTemplate = document.querySelector('#picture');
+var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 
 var fragment = document.createDocumentFragment();
 
 // функция создания DOM-элемента фотографий
-var createHtmlNode = function (arrayData) {
-  for (var i = 0; i < arrayData.length; i++) {
-    var newNode = document.createElement('div');
-    newNode = pictureTemplate.cloneNode(true);
-    newNode.content.querySelector('.picture__img').src = arrayData[i].url;
-    newNode.content.querySelector('.picture__likes').textContent = arrayData[i].likes;
-    newNode.content.querySelector('.picture__comments').textContent = arrayData[i].comments.message;
-    fragment.appendChild(newNode.content);
+var createHtmlNode = function (data)  {
+  for (var i = 0; i < data.length; i++) {
+    var newNode = pictureTemplate.cloneNode(true);
+    newNode.querySelector('.picture__img').src = data[i].url;
+    newNode.querySelector('.picture__likes').textContent = data[i].likes;
+    newNode.querySelector('.picture__comments').textContent = data[i].comments.message;
+    fragment.appendChild(newNode);
   }
   return fragment;
 };
@@ -139,9 +136,8 @@ showBigPicture();
 // ------------------------5-я часть задания-----------------------------
 
 var hiddenDomElements = function () {
-  var hiddenElement = document.querySelector('.social__comment-count').classList.add('visually-hidden');
-  hiddenElement = document.querySelector('.comments-loader').classList.add('visually-hidden');
-  return hiddenElement;
+  document.querySelector('.social__comment-count').classList.add('visually-hidden');
+  document.querySelector('.comments-loader').classList.add('visually-hidden');
 };
 
 hiddenDomElements();
