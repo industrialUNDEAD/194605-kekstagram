@@ -48,7 +48,7 @@ var getUserAvatar = function () {
 
 // функция которая перебирает массив данных и возвращает случайное значение
 var getRandomArrayValue = function (arrayName) {
-  var getValue = arrayName[randomNumber(0, 5)]; // должна считать случайное число
+  var getValue = arrayName[randomNumber(0, arrayName.length - 1)]; // должна считать случайное число
   return getValue;
 };
 
@@ -101,7 +101,7 @@ var pictureTemplate = document.querySelector('#picture').content.querySelector('
 var fragment = document.createDocumentFragment();
 
 // функция создания DOM-элемента фотографий
-var createHtmlNode = function (data)  {
+var createHtmlNode = function (data) {
   for (var i = 0; i < data.length; i++) {
     var newNode = pictureTemplate.cloneNode(true);
     newNode.querySelector('.picture__img').src = data[i].url;
