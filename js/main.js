@@ -131,7 +131,7 @@ var showBigPicture = function () {
   bigPicture.querySelector('.social__text').textContent = commentsArray[0].comments.message;
   bigPicture.querySelector('.social__caption').textContent = 'Описание фотографии'; // как я понял, описание фотографии потом будет приходить с сервера., а пока подсказали так сделать.
 };
-showBigPicture();
+// showBigPicture(); временно убираю вызов отрисовки оверлея для 4-го задания
 
 // ------------------------5-я часть задания-----------------------------
 
@@ -141,3 +141,58 @@ var hiddenDomElements = function () {
 };
 
 hiddenDomElements();
+
+// ------------------------4-Й МОДУЛЬ-------------------------------------
+
+var uploadControl = document.querySelector('#upload-file'); // найти поле загрузки файлов
+var editingForm = document.querySelector('.img-upload__overlay'); // найти форму редактирования фотографий
+var buttonUploadCancel = document.querySelector('#upload-cancel'); // найти кнопку закрытия формы редактирования
+var effectLevelPin = document.querySelector('.effect-level__pin'); // найти пин слайдера
+var effectLevelLine = document.querySelector('.effect-level__line'); // найти шкалу применяемого эффекта
+var imagePreview = document.querySelector('.img-upload__preview > img'); // найти блок с загруженным изображением
+var effectToggles = document.querySelectorAll('.effects__radio'); // найти переключатели эффектов
+
+uploadControl.addEventListener('change', function () { // обработчик события изменения поля загрузки файлов
+  editingForm.classList.remove('hidden');
+  document.addEventListener('keydown', function (evt) { // обработчик закритя редактора по нажитию esc
+    if (evt.keyCode === 27) {
+      closeUploadModal();
+      uploadControl.value = ''; // сброс значения поля формы при закрытие клавишей, иначе одну и ту же фотографию не открыть
+    }
+  });
+});
+
+var closeUploadModal = function () { // функция закрытия формы редактирования фотограий
+  editingForm.classList.add('hidden');
+};
+
+var onEffectToggle = function (effectToggle) { // функция переключающая эффекты наложения по клику
+  effectToggle.addEventListener('click', function () {
+    if (effectToggle.classList.contains('#effect-none')) {
+      imagePreview.classList.remove();
+    } else if (effectToggle.classList.contains('#effect-chrome')) {
+      imagePreview.classList.add('effects__preview--chrome');
+    } else if (effectToggle.classList.contains('#effect-sepia')) {
+      imagePreview.classList.add('effects__preview--sepia');
+    } else if (effectToggle.classList.contains('#effect-marvin')) {
+      imagePreview.classList.add('effects__preview--marvin');
+    } else if (effectToggle.classList.contains('#effect-phobos')) {
+      imagePreview.classList.add('effects__preview--phobos');
+    } else if (effectToggle.classList.contains('#effect-heat')) {
+      imagePreview.classList.add('effects__preview--heat');
+    }
+  });
+};
+
+for (var i = 0; i < effectToggles.length; i++) { // цикл создающий замыкание для переключения эффектов
+  onEffectToggle(effectToggles[i]);
+}
+
+effectLevelPin.addEventListener('mouseup', function () { // обработчик события отпускания ползунка
+  var mouseClick = effectLevelLine.getBoundingClientRect().x; // метод возвращающий координаты
+  console.log(mouseClick);
+  return mouseClick;
+});
+
+buttonUploadCancel.addEventListener('click', closeUploadModal); // обработчик закрытия редактора по клику
+  console.log(effectToggles);
