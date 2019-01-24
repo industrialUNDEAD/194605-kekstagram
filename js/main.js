@@ -150,7 +150,7 @@ var buttonUploadCancel = document.querySelector('#upload-cancel'); // найти
 var effectLevelPin = document.querySelector('.effect-level__pin'); // найти пин слайдера
 var effectLevelLine = document.querySelector('.effect-level__line'); // найти шкалу применяемого эффекта
 var imagePreview = document.querySelector('.img-upload__preview > img'); // найти блок с загруженным изображением
-var effectToggles = document.querySelectorAll('.effects__radio'); // найти переключатели эффектов
+var effectToggles = document.querySelectorAll('.effects__preview'); // найти переключатели эффектов
 
 uploadControl.addEventListener('change', function () { // обработчик события изменения поля загрузки файлов
   editingForm.classList.remove('hidden');
@@ -168,17 +168,22 @@ var closeUploadModal = function () { // функция закрытия форм
 
 var onEffectToggle = function (effectToggle) { // функция переключающая эффекты наложения по клику
   effectToggle.addEventListener('click', function () {
-    if (effectToggle.classList.contains('#effect-none')) {
-      imagePreview.classList.remove();
-    } else if (effectToggle.classList.contains('#effect-chrome')) {
+    if (effectToggle.classList.contains('effects__preview--none')) {
+      imagePreview.classList = '';
+    } else if (effectToggle.classList.contains('effects__preview--chrome')) {
+      imagePreview.classList = '';
       imagePreview.classList.add('effects__preview--chrome');
-    } else if (effectToggle.classList.contains('#effect-sepia')) {
+    } else if (effectToggle.classList.contains('effects__preview--sepia')) {
+      imagePreview.classList = '';
       imagePreview.classList.add('effects__preview--sepia');
-    } else if (effectToggle.classList.contains('#effect-marvin')) {
+    } else if (effectToggle.classList.contains('effects__preview--marvin')) {
+      imagePreview.classList = '';
       imagePreview.classList.add('effects__preview--marvin');
-    } else if (effectToggle.classList.contains('#effect-phobos')) {
+    } else if (effectToggle.classList.contains('effects__preview--phobos')) {
+      imagePreview.classList = '';
       imagePreview.classList.add('effects__preview--phobos');
-    } else if (effectToggle.classList.contains('#effect-heat')) {
+    } else if (effectToggle.classList.contains('effects__preview--heat')) {
+      imagePreview.classList = '';
       imagePreview.classList.add('effects__preview--heat');
     }
   });
