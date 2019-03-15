@@ -125,13 +125,13 @@ var showBigPicture = function () {
   bigPicture.classList.remove('hidden');
   bigPicture.querySelector('.big-picture__img').src = commentsArray[0].url;
   bigPicture.querySelector('.likes-count').textContent = commentsArray[0].likes;
-  bigPicture.querySelector('.comments-count').textContent = 1; // как я понял, здесь нужно просто встявить своё кол-во комментов
+  bigPicture.querySelector('.comments-count').textContent = 1; // как я понял, здесь нужно просто вставить своё кол-во комментов
   bigPicture.querySelector('.social__picture').src = 'img/avatar-' +
   randomNumber(1, 6) + '.svg';
   bigPicture.querySelector('.social__text').textContent = commentsArray[0].comments.message;
   bigPicture.querySelector('.social__caption').textContent = 'Описание фотографии'; // как я понял, описание фотографии потом будет приходить с сервера., а пока подсказали так сделать.
 };
-// showBigPicture(); временно убираю вызов отрисовки оверлея для 4-го задания
+// showBigPicture();  временно убираю вызов отрисовки оверлея для 4-го задания
 
 // ------------------------5-я часть задания-----------------------------
 
@@ -151,6 +151,7 @@ var effectLevelPin = document.querySelector('.effect-level__pin'); // найти
 var effectLevelLine = document.querySelector('.effect-level__line'); // найти шкалу применяемого эффекта
 var imagePreview = document.querySelector('.img-upload__preview > img'); // найти блок с загруженным изображением
 var effectToggles = document.querySelectorAll('.effects__preview'); // найти переключатели эффектов
+var keyboardToggle = document.querySelectorAll('.effects__item'); // найти элементы переключения эффектов фотографий с клавиатуры
 
 uploadControl.addEventListener('change', function () { // обработчик события изменения поля загрузки файлов
   editingForm.classList.remove('hidden');
@@ -166,31 +167,44 @@ var closeUploadModal = function () { // функция закрытия форм
   editingForm.classList.add('hidden');
 };
 
-var onEffectToggle = function (effectToggle) { // функция переключающая эффекты наложения по клику
+var toggleEffect = function (toggle) { // функция добавления и удаления эффектов при нажатии или клике
+  if (toggle.children[1].children[0].classList.contains('effects__preview--none')) {
+    imagePreview.classList = '';
+  } else if (toggle.children[1].children[0].classList.contains('effects__preview--chrome')) {
+    imagePreview.classList = '';
+    imagePreview.classList.add('effects__preview--chrome');
+  } else if (toggle.children[1].children[0].classList.contains('effects__preview--sepia')) {
+    imagePreview.classList = '';
+    imagePreview.classList.add('effects__preview--sepia');
+  } else if (toggle.children[1].children[0].classList.contains('effects__preview--marvin')) {
+    imagePreview.classList = '';
+    imagePreview.classList.add('effects__preview--marvin');
+  } else if (toggle.children[1].children[0].classList.contains('effects__preview--phobos')) {
+    imagePreview.classList = '';
+    imagePreview.classList.add('effects__preview--phobos');
+  } else if (toggle.children[1].children[0].classList.contains('effects__preview--heat')) {
+    imagePreview.classList = '';
+    imagePreview.classList.add('effects__preview--heat');
+  }
+};
+
+
+var onEffectToggle = function (effectToggle) { // функция переключающая эффекты наложения по клику и по нажатию клавиши
   effectToggle.addEventListener('click', function () {
-    if (effectToggle.classList.contains('effects__preview--none')) {
-      imagePreview.classList = '';
-    } else if (effectToggle.classList.contains('effects__preview--chrome')) {
-      imagePreview.classList = '';
-      imagePreview.classList.add('effects__preview--chrome');
-    } else if (effectToggle.classList.contains('effects__preview--sepia')) {
-      imagePreview.classList = '';
-      imagePreview.classList.add('effects__preview--sepia');
-    } else if (effectToggle.classList.contains('effects__preview--marvin')) {
-      imagePreview.classList = '';
-      imagePreview.classList.add('effects__preview--marvin');
-    } else if (effectToggle.classList.contains('effects__preview--phobos')) {
-      imagePreview.classList = '';
-      imagePreview.classList.add('effects__preview--phobos');
-    } else if (effectToggle.classList.contains('effects__preview--heat')) {
-      imagePreview.classList = '';
-      imagePreview.classList.add('effects__preview--heat');
+    toggleEffect(effectToggle);
+    return;
+  });
+  effectToggle.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === 32) {
+      toggleEffect(effectToggle);
+    } else {
+      return;
     }
   });
 };
 
 for (var i = 0; i < effectToggles.length; i++) { // цикл создающий замыкание для переключения эффектов
-  onEffectToggle(effectToggles[i]);
+  onEffectToggle(keyboardToggle[i]);
 }
 
 effectLevelPin.addEventListener('mouseup', function () { // обработчик события отпускания ползунка
