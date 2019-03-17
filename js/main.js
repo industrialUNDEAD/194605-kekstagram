@@ -150,7 +150,6 @@ var buttonUploadCancel = document.querySelector('#upload-cancel'); // найти
 var effectLevelPin = document.querySelector('.effect-level__pin'); // найти пин слайдера
 var effectLevelLine = document.querySelector('.effect-level__line'); // найти шкалу применяемого эффекта
 var imagePreview = document.querySelector('.img-upload__preview > img'); // найти блок с загруженным изображением
-var effectToggles = document.querySelectorAll('.effects__preview'); // найти переключатели эффектов
 var keyboardToggle = document.querySelectorAll('.effects__item'); // найти элементы переключения эффектов фотографий с клавиатуры
 
 uploadControl.addEventListener('change', function () { // обработчик события изменения поля загрузки файлов
@@ -194,16 +193,16 @@ var onEffectToggle = function (effectToggle) { // функция переклю�
     toggleEffect(effectToggle);
     return;
   });
-  effectToggle.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === 32) {
-      toggleEffect(effectToggle);
-    } else {
-      return;
-    }
-  });
+  // effectToggle.addEventListener('keydown', function (evt) { // вариант переключения эффектов на нажатию пробела
+  //   if (evt.keyCode === 32) {
+  //     toggleEffect(effectToggle);
+  //   } else {
+  //     return;
+  //   }
+  // });
 };
 
-for (var i = 0; i < effectToggles.length; i++) { // цикл создающий замыкание для переключения эффектов
+for (var i = 0; i < keyboardToggle.length; i++) { // цикл создающий замыкание для переключения эффектов
   onEffectToggle(keyboardToggle[i]);
 }
 
