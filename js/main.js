@@ -151,6 +151,7 @@ var effectLevelPin = document.querySelector('.effect-level__pin'); // найти
 var effectLevelLine = document.querySelector('.effect-level__line'); // найти шкалу применяемого эффекта
 var imagePreview = document.querySelector('.img-upload__preview > img'); // найти блок с загруженным изображением
 var keyboardToggle = document.querySelectorAll('.effects__item'); // найти элементы переключения эффектов фотографий с клавиатуры
+var hashtagsInput = document.querySelector('.text__hashtags'); // найти поле для ввода хештегов
 
 uploadControl.addEventListener('change', function () { // обработчик события изменения поля загрузки файлов
   editingForm.classList.remove('hidden');
@@ -206,6 +207,9 @@ for (var i = 0; i < keyboardToggle.length; i++) { // цикл создающий
   onEffectToggle(keyboardToggle[i]);
 }
 
+var userHashtags = hashtagsInput.value.split(' '); // разбиение ввёденых хештегов на массив строк
+console.log(userHashtags);
+
 effectLevelPin.addEventListener('mouseup', function () { // обработчик события отпускания ползунка
   var mouseClick = effectLevelLine.getBoundingClientRect().x; // метод возвращающий координаты
   console.log(mouseClick);
@@ -213,4 +217,4 @@ effectLevelPin.addEventListener('mouseup', function () { // обработчик
 });
 
 buttonUploadCancel.addEventListener('click', closeUploadModal); // обработчик закрытия редактора по клику
-  console.log(effectToggles);
+  console.log(hashtagsInput);
