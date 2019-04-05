@@ -220,57 +220,57 @@ for (var i = 0; i < keyboardToggle.length; i++) { // цикл создающий
 
 // Тестовый вариант валидации хештегов
 
-var QUANTITY_HASH_TAG = 5;
-var HASH_TAG_LENGTH = 20;
+var QUANTITY_HASH_TAG = 5; // допустимое количество хештегов
+var HASH_TAG_LENGTH = 20; // допустимая длинна одного хештега
 
 var getCountHashTag = function (text) { // функция считает количество хеш-тегов
-  var count = 0;
-  var pos = text.indexOf('#');
+  var count = 0; // счетчик считающий количество хештегов
+  var post = text.indexOf('#'); // переменная, которая ищет символы решетки для хештегов
 
-  while (pos !== -1) {
-    count++;
-    pos = text.indexOf('#', pos + 1);
+  while (post !== -1) { // условие проверяющее налачие символа решетки
+    count++; // увеличение счетчика хештегов
+    post = text.indexOf('#', post + 1); // назначение поиска следующего символа
   }
-  return count;
+  return count; // возращение количества хештегов из функции
 };
 
 var removeSameElement = function (elements) { // функция проверяет есть ли одинаковые хештеги
-  var obj = {};
-  for (var u = 0; u < elements.length; u++) {
-    var element = elements[u];
+  var obj = {}; // создание объекта для записи хештегов в свойства этого объекта
+  for (var i = 0; i < elements.length; i++) { // создания цикла для записи каждого хештега в свойства объекта
+    var element = elements[i]; // создания переменной хранаящей текущий хештег
     obj[element] = true; // запомнить строку в виде свойства объекта
   }
-  return Object.keys(obj);
+  return Object.keys(obj); // возвращение ключей свойств объекта., если у объекта будут 2 одинаковых свойства, то одно просто перезапишет другое, 2 одинаковых быть не сможет
 };
 
-hashtagsInput.addEventListener('input', function () {
-  var hashTagText = hashtagsInput.value.trim();
-  var hashTags = hashTagText.toLowerCase().split(' ');
-  var errorMessage = '';
-  if (getCountHashTag(hashTagText) > QUANTITY_HASH_TAG) {
-    errorMessage = 'Нельзя указать больше пяти хэш-тегов';
+hashtagsInput.addEventListener('input', function () { // обработчик проводящий валидацию поля хештегов
+  var hashTagText = hashtagsInput.value.trim(); // запись текста хештегов в отдельную переменную
+  var hashTags = hashTagText.toLowerCase().split(' '); // запись в отдельную переменную массива хештегов
+  var errorMessage = ''; // переменная для вывода сообщения с ошибкой валидации пользователя
+  if (getCountHashTag(hashTagText) > QUANTITY_HASH_TAG) { // проверка на соответсвтие количества хештегов
+    errorMessage = 'Нельзя указать больше пяти хэш-тегов'; // сообщение о неверном количестве хештегов
   }
 
-  if (removeSameElement(hashTags).length < hashTags.length) {
-    errorMessage = 'Один и тот же хэш-тег не может быть использован дважды';
+  if (removeSameElement(hashTags).length < hashTags.length) { // проверка на наличие одинаковых хештегов
+    errorMessage = 'Один и тот же хэш-тег не может быть использован дважды'; // сообщение о недопустимости повторения хештегов
   }
 
-  for (var I = 0; I < hashTags.length; I++) {
-    var hashTag = hashTags[I];
-    if (hashTag[0] !== '#') {
-      errorMessage = 'Хэш-тег должен начинаться с решетки #';
-    } else if (hashTag.length === 1) {
-      errorMessage = 'Хеш-тег не может состоять только из одной решётки';
-    } else if (hashTag.length > HASH_TAG_LENGTH) {
-      errorMessage = 'Максимальная длина одного хэш-тега 20 символов, включая решётку';
-    } else if (hashTag.indexOf('#', 1) > 1) {
-      errorMessage = 'Хэштеги должны разделяться пробелами';
+  for (var i = 0; i < hashTags.length; i++) { // цикл проводящий валидацию полученных хештегов
+    var hashTag = hashTags[i]; // создание переменной хранящей отдельно взятый хештег
+    if (hashTag[0] !== '#') { // проверка на наличие решетки на начале хештега
+      errorMessage = 'Хэш-тег должен начинаться с решетки #'; // вывода сообщения об отсутствии решетки в названии хештега
+    } else if (hashTag.length === 1) { // проверка на наличие символов, кроме решетки
+      errorMessage = 'Хеш-тег не может состоять только из одной решётки'; // вывода сообщения об отсутствии остальных символов
+    } else if (hashTag.length > HASH_TAG_LENGTH) { // проверка на длинну отдельного хештега
+      errorMessage = 'Максимальная длина одного хэш-тега 20 символов, включая решётку'; // вывод сообщения об превешении макисальной длинны хештега
+    } else if (hashTag.indexOf('#', 1) > 1) { // проверка на наличие пробелов между хештегами
+      errorMessage = 'Хэштеги должны разделяться пробелами'; // вывод сообщения об отсутсвии пробелов
     }
   }
-  if (hashTag === '') {
-    errorMessage = '';
+  if (hashTag === '') { // проверка на отсутсвтие хештегов
+    errorMessage = ''; // в таком случае ошибок нет
   }
-  hashtagsInput.setCustomValidity(errorMessage);
+  hashtagsInput.setCustomValidity(errorMessage); // вывод сообщения о провале валидации формы
 });
 
 // Тестовый вариант валидации хештегов
