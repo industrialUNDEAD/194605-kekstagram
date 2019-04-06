@@ -218,7 +218,7 @@ for (var i = 0; i < keyboardToggle.length; i++) { // цикл создающий
 //   }
 // });
 
-// Тестовый вариант валидации хештегов
+// Вариант валидации хештегов
 
 var QUANTITY_HASH_TAG = 5; // допустимое количество хештегов
 var HASH_TAG_LENGTH = 20; // допустимая длинна одного хештега
@@ -273,7 +273,7 @@ hashtagsInput.addEventListener('input', function () { // обработчик п
   hashtagsInput.setCustomValidity(errorMessage); // вывод сообщения о провале валидации формы
 });
 
-// Тестовый вариант валидации хештегов
+// Вариант валидации хештегов
 
 effectLevelPin.addEventListener('mouseup', function () { // обработчик события отпускания ползунка
   var mouseClick = effectLevelLine.getBoundingClientRect().x; // метод возвращающий координаты
