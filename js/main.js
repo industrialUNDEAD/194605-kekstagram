@@ -147,8 +147,6 @@ hiddenDomElements();
 var uploadControl = document.querySelector('#upload-file'); // найти поле загрузки файлов
 var editingForm = document.querySelector('.img-upload__overlay'); // найти форму редактирования фотографий
 var buttonUploadCancel = document.querySelector('#upload-cancel'); // найти кнопку закрытия формы редактирования
-var effectLevelPin = document.querySelector('.effect-level__pin'); // найти пин слайдера
-var effectLevelLine = document.querySelector('.effect-level__line'); // найти шкалу применяемого эффекта
 var imagePreview = document.querySelector('.img-upload__preview > img'); // найти блок с загруженным изображением
 var keyboardToggle = document.querySelectorAll('.effects__item'); // найти элементы переключения эффектов фотографий с клавиатуры
 var hashtagsInput = document.querySelector('.text__hashtags'); // найти поле для ввода хештегов
@@ -274,6 +272,11 @@ hashtagsInput.addEventListener('input', function () { // обработчик п
 });
 
 // Вариант валидации хештегов
+
+// ------------------------5-й модуль----------------------------------------
+
+var effectLevelPin = document.querySelector('.effect-level__pin'); // найти пин слайдера
+var effectLevelLine = document.querySelector('.effect-level__line'); // найти шкалу применяемого эффекта
 
 effectLevelPin.addEventListener('mouseup', function () { // обработчик события отпускания ползунка
   var mouseClick = effectLevelLine.getBoundingClientRect().x; // метод возвращающий координаты
