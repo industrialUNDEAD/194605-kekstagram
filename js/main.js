@@ -279,7 +279,79 @@ var sliderEffectLevel = document.querySelector('.effect-level__pin'); // най�
 var sliderEffectLine = document.querySelector('.effect-level__line'); // найти шкалу применяемого эффекта
 var sliderEffectValue = document.querySelector('.effect-level__value'); //
 var sliderEffectDepth = document.querySelector('.effect-level__depth');
+var preview = document.querySelector('.img-upload__preview');
+var slider = document.querySelector('.effect-level');
+var effectsDirectoryFilter;
+var effectNames = ['none', 'chrome', 'sepia', 'marvin', 'phobos', 'heat'];
+var currentFilter;
 var WIDTH_SCALE = 453; // найти ширину шкалы эффекта
+var BORDERS_OF_BRIGHTNESS = 2 + 1;
+var BORDERS_OF_BLUR = 3;
+var BORDERS_OF_INVERT = 100;
+var EFFECT_LEVEL_MAX = 1;
+var EFFECT_LEVEL_MIN = 0;
+var effectItems = document.querySelectorAll('.effects__radio');
+
+var getNone = function () {
+  slider.classList.add('hidden');
+  for (var i = 1; i < effectNames.length - 1; i++) {
+    effectsDirectory[effectNames[i]](EFFECT_LEVEL_MIN);
+  }
+};
+
+var getChrome = function (grayScale) {
+  preview.style.filter = 'grayscale(' + grayScale + ')';
+};
+
+var getSepia = function (sepia) {
+  preview.style.filter = 'sepia(' + sepia + ')';
+};
+
+var getMarvin = function (invert) {
+  preview.style.filter = 'invert(' + invert * BORDERS_OF_INVERT + '%)';
+};
+
+var getPhobos = function (blur) {
+  preview.style.filter = 'blur(' + blur * BORDERS_OF_BLUR + 'px)';
+};
+
+var getHeat = function (brightness) {
+  preview.style.filter = 'brightness(' + (brightness * BORDERS_OF_BRIGHTNESS) + ')';
+};
+
+// Объект с вызовами фенкций для эффектов
+
+var effectsDirectory = {
+  none: getNone,
+  chrome: getChrome,
+  sepia: getSepia,
+  marvin: getMarvin,
+  phobos: getPhobos,
+  heat: getHeat
+};
+
+// Применения эффекта для изображения
+
+var addEffectListClickHandler = function (effects, effectName) {
+  effects.addEventListener('click', function () {
+    sliderEffectLevel.style.left = 100 + '%';
+    sliderEffectDepth.style.width = 100 + '%';
+    slider.classList.remove('hidden');
+    preview.classList.remove(currentFilter);
+    currentFilter = 'effects__preview--' + effectName;
+    preview.classList.add(currentFilter);
+    effectsDirectoryFilter = effectName;
+    if (effectsDirectoryFilter === 'none') {
+      getNone();
+    } else {
+      effectsDirectory[effectsDirectoryFilter](EFFECT_LEVEL_MAX);
+    }
+  });
+};
+
+for (var i = 0; i < effectItems.length; i++) {
+  addEffectListClickHandler(effectItems[i], effectNames[i]);
+}
 
 // Перетаскивание ползунка
 sliderEffectLevel.addEventListener('mousedown', function (evt) {
