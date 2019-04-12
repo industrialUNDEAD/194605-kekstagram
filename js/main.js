@@ -275,14 +275,65 @@ hashtagsInput.addEventListener('input', function () { // обработчик п
 
 // ------------------------5-й модуль----------------------------------------
 
-var effectLevelPin = document.querySelector('.effect-level__pin'); // найти пин слайдера
-var effectLevelLine = document.querySelector('.effect-level__line'); // найти шкалу применяемого эффекта
+var sliderEffectLevel = document.querySelector('.effect-level__pin'); // найти пин слайдера
+var sliderEffectLine = document.querySelector('.effect-level__line'); // найти шкалу применяемого эффекта
+var sliderEffectValue = document.querySelector('.effect-level__value'); //
+var sliderEffectDepth = document.querySelector('.effect-level__depth');
+var WIDTH_SCALE = 453; // найти ширину шкалы эффекта
 
-effectLevelPin.addEventListener('mouseup', function () { // обработчик события отпускания ползунка
-  var mouseClick = effectLevelLine.getBoundingClientRect().x; // метод возвращающий координаты
-  console.log(mouseClick);
-  return mouseClick;
+// Перетаскивание ползунка
+sliderEffectLevel.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+
+  var startCoords = {
+    x: evt.clientX
+  };
+
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX
+    };
+
+    startCoords = {
+      x: moveEvt.clientX
+    };
+
+    var movePin = sliderEffectLevel.offsetLeft - shift.x;
+    var coordsPin = movePin + 'px';
+
+    if (movePin >= 0 && movePin <= WIDTH_SCALE) {
+      sliderEffectLevel.style.left = coordsPin;
+      sliderEffectDepth.style.width = coordsPin;
+      var effectLevel = sliderEffectLevel.offsetLeft / sliderEffectLine.offsetWidth;
+      effectsDirectory[effectsDirectoryFilter](effectLevel);
+      sliderEffectValue.value = effectLevel * 100;
+    }
+  };
+
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  };
+
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
 });
+
+
+// effectLevelLine.addEventListener('click', function () {
+//   effectLevelLine.getBoundingClientRect();
+//   console.log(effectLevelLine.getBoundingClientRect());
+// });
+
+// effectLevelPin.addEventListener('mouseup', function () { // обработчик события отпускания ползунка
+//   var mouseClick = effectLevelLine.getBoundingClientRect().x; // метод возвращающий координаты
+//   console.log(mouseClick);
+//   return mouseClick;
+// });
 
 buttonUploadCancel.addEventListener('click', closeUploadModal); // обработчик закрытия редактора по клику
   console.log(hashtagsInput);
