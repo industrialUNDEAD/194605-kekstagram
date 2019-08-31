@@ -78,7 +78,7 @@
     preview.style.filter = 'brightness(' + (brightness * BORDERS_OF_BRIGHTNESS) + ')';
   };
 
-  // Объект с вызовами фенкций для эффектов
+  // Объект с вызовами функций для эффектов
 
   var effectsDirectory = {
     none: getNone,
