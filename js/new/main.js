@@ -220,4 +220,70 @@ var eddedToggle = function (nodeListener, elementIndex) {
 
 addEffectToggles(effectPhotoButtons);
 
-console.log(effectsNamesList);
+///////////////////////////хештеги////////////////////////////////////////////////////////
+
+var hashtagsInput = document.querySelector('.text__hashtags');
+var buttonCloseEditor = document.querySelector('.img-upload__submit');
+
+buttonCloseEditor.addEventListener('click', function () {
+  debugger;
+  var hashtagsMass = [];
+  hashtagsMass = hashtagsInput.value.split(' ');
+  alignmentHashtagRegister(hashtagsMass); // приведение хештегов пользователя к общему регистру
+  checkHashtags(hashtagsMass);
+  console.log(hashtagsMass);
+});
+
+console.log(hashtagsInput);
+
+var checkHashtags = function (hashtags) {
+  var uniqueHashtags = [];
+  for (var i = 0; i < hashtags.length; i++) {
+    var checkingDuplicate = checkHashtagDuplicate(hashtags[i], uniqueHashtags);
+    var sharpCount = hashtags[i].split('#');
+    if (hashtags.length > 5) {
+      hashtagsInput.setCustomValidity('нельзя указать больше пяти хэш-тегов');
+      break;
+    } if (hashtags[i] === '') { // возможность не использовать хештеги
+      hashtagsInput.setCustomValidity('');
+      break;
+    } if (hashtags[i].length > 20) {
+      hashtagsInput.setCustomValidity('максимальная длина одного хэш-тега 20 символов, включая решётку');
+      break;
+    } if (hashtags[i].charAt(0) !== '#') {
+      hashtagsInput.setCustomValidity('хэш-тег начинается с символа # (решётка)');
+      i = hashtags.length;
+      break;
+    } if ((hashtags[i].length === 1) && (hashtags[i].charAt(0) === '#')) {
+      hashtagsInput.setCustomValidity('хеш-тег не может состоять только из одной решётки');
+      i = hashtags.length;
+      break;
+    } if (sharpCount.length > 2) {
+      hashtagsInput.setCustomValidity('хэш-теги разделяются пробелами');
+      i = hashtags.length;
+      break;
+    } if (checkingDuplicate) {
+      hashtagsInput.setCustomValidity('один и тот же хэш-тег не может быть использован дважды');
+      break;
+    } else {
+      hashtagsInput.setCustomValidity('');
+      uniqueHashtags.push(hashtags[i]);
+    }
+  }
+};
+
+var checkHashtagDuplicate = function (itemChecked, validHashtags) {
+  for (var i = 0; i < validHashtags.length; i++) {
+    if (itemChecked === validHashtags[i]) {
+      return 1;
+    }
+  }
+  return 0;
+};
+
+var alignmentHashtagRegister = function (hashtagsCollection) {
+  for (var i = 0; i < hashtagsCollection.length; i++) {
+    hashtagsCollection[i].toLoverCase();
+  }
+  return hashtagsCollection;
+};
