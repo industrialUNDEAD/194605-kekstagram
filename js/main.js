@@ -125,13 +125,13 @@ var showBigPicture = function () {
   bigPicture.classList.remove('hidden');
   bigPicture.querySelector('.big-picture__img').src = commentsArray[0].url;
   bigPicture.querySelector('.likes-count').textContent = commentsArray[0].likes;
-  bigPicture.querySelector('.comments-count').textContent = 1; // как я понял, здесь нужно просто встявить своё кол-во комментов
+  bigPicture.querySelector('.comments-count').textContent = 1; // как я понял, здесь нужно просто вставить своё кол-во комментов
   bigPicture.querySelector('.social__picture').src = 'img/avatar-' +
   randomNumber(1, 6) + '.svg';
   bigPicture.querySelector('.social__text').textContent = commentsArray[0].comments.message;
   bigPicture.querySelector('.social__caption').textContent = 'Описание фотографии'; // как я понял, описание фотографии потом будет приходить с сервера., а пока подсказали так сделать.
 };
-showBigPicture();
+// showBigPicture();  временно убираю вызов отрисовки оверлея для 4-го задания
 
 // ------------------------5-я часть задания-----------------------------
 
@@ -141,3 +141,271 @@ var hiddenDomElements = function () {
 };
 
 hiddenDomElements();
+
+// ------------------------4-Й МОДУЛЬ-------------------------------------
+
+var uploadControl = document.querySelector('#upload-file'); // найти поле загрузки файлов
+var editingForm = document.querySelector('.img-upload__overlay'); // найти форму редактирования фотографий
+var buttonUploadCancel = document.querySelector('#upload-cancel'); // найти кнопку закрытия формы редактирования
+var imagePreview = document.querySelector('.img-upload__preview > img'); // найти блок с загруженным изображением
+var keyboardToggle = document.querySelectorAll('.effects__item'); // найти элементы переключения эффектов фотографий с клавиатуры
+var hashtagsInput = document.querySelector('.text__hashtags'); // найти поле для ввода хештегов
+
+uploadControl.addEventListener('change', function () { // обработчик события изменения поля загрузки файлов
+  editingForm.classList.remove('hidden');
+  document.addEventListener('keydown', function (evt) { // обработчик закритя редактора по нажитию esc
+    if (evt.keyCode === 27) {
+      closeUploadModal();
+      uploadControl.value = ''; // сброс значения поля формы при закрытие клавишей, иначе одну и ту же фотографию не открыть
+    }
+  });
+});
+
+var closeUploadModal = function () { // функция закрытия формы редактирования фотограий
+  editingForm.classList.add('hidden');
+};
+
+var toggleEffect = function (toggle) { // функция добавления и удаления эффектов при нажатии или клике
+  if (toggle.children[1].children[0].classList.contains('effects__preview--none')) {
+    imagePreview.classList = '';
+  } else if (toggle.children[1].children[0].classList.contains('effects__preview--chrome')) {
+    imagePreview.classList = '';
+    imagePreview.classList.add('effects__preview--chrome');
+  } else if (toggle.children[1].children[0].classList.contains('effects__preview--sepia')) {
+    imagePreview.classList = '';
+    imagePreview.classList.add('effects__preview--sepia');
+  } else if (toggle.children[1].children[0].classList.contains('effects__preview--marvin')) {
+    imagePreview.classList = '';
+    imagePreview.classList.add('effects__preview--marvin');
+  } else if (toggle.children[1].children[0].classList.contains('effects__preview--phobos')) {
+    imagePreview.classList = '';
+    imagePreview.classList.add('effects__preview--phobos');
+  } else if (toggle.children[1].children[0].classList.contains('effects__preview--heat')) {
+    imagePreview.classList = '';
+    imagePreview.classList.add('effects__preview--heat');
+  }
+};
+
+
+var onEffectToggle = function (effectToggle) { // функция переключающая эффекты наложения по клику и по нажатию клавиши
+  effectToggle.addEventListener('click', function () {
+    toggleEffect(effectToggle);
+    return;
+  });
+  // effectToggle.addEventListener('keydown', function (evt) { // вариант переключения эффектов на нажатию пробела
+  //   if (evt.keyCode === 32) {
+  //     toggleEffect(effectToggle);
+  //   } else {
+  //     return;
+  //   }
+  // });
+};
+
+for (var i = 0; i < keyboardToggle.length; i++) { // цикл создающий замыкание для переключения эффектов
+  onEffectToggle(keyboardToggle[i]);
+}
+
+// var userHashtags = hashtagsInput.value.split(' '); // разбиение ввёденых хештегов на массив строк
+// console.log(userHashtags);
+
+// hashtagsInput.addEventListener('input', function () {
+//   if (hashtagsInput.value.indexOf('#') === -1) {
+//     hashtagsInput.setCustomValidity('Хештег должен начинаться с символа решетки #');
+//   } else {
+//     hashtagsInput.setCustomValidity('');
+//   }
+// });
+
+// Вариант валидации хештегов
+
+var QUANTITY_HASH_TAG = 5; // допустимое количество хештегов
+var HASH_TAG_LENGTH = 20; // допустимая длинна одного хештега
+
+var getCountHashTag = function (text) { // функция считает количество хеш-тегов
+  var count = 0; // счетчик считающий количество хештегов
+  var post = text.indexOf('#'); // переменная, которая ищет символы решетки для хештегов
+
+  while (post !== -1) { // условие проверяющее налачие символа решетки
+    count++; // увеличение счетчика хештегов
+    post = text.indexOf('#', post + 1); // назначение поиска следующего символа
+  }
+  return count; // возращение количества хештегов из функции
+};
+
+var removeSameElement = function (elements) { // функция проверяет есть ли одинаковые хештеги
+  var obj = {}; // создание объекта для записи хештегов в свойства этого объекта
+  for (var i = 0; i < elements.length; i++) { // создания цикла для записи каждого хештега в свойства объекта
+    var element = elements[i]; // создания переменной хранаящей текущий хештег
+    obj[element] = true; // запомнить строку в виде свойства объекта
+  }
+  return Object.keys(obj); // возвращение ключей свойств объекта., если у объекта будут 2 одинаковых свойства, то одно просто перезапишет другое, 2 одинаковых быть не сможет
+};
+
+hashtagsInput.addEventListener('input', function () { // обработчик проводящий валидацию поля хештегов
+  var hashTagText = hashtagsInput.value.trim(); // запись текста хештегов в отдельную переменную
+  var hashTags = hashTagText.toLowerCase().split(' '); // запись в отдельную переменную массива хештегов
+  var errorMessage = ''; // переменная для вывода сообщения с ошибкой валидации пользователя
+  if (getCountHashTag(hashTagText) > QUANTITY_HASH_TAG) { // проверка на соответсвтие количества хештегов
+    errorMessage = 'Нельзя указать больше пяти хэш-тегов'; // сообщение о неверном количестве хештегов
+  }
+
+  if (removeSameElement(hashTags).length < hashTags.length) { // проверка на наличие одинаковых хештегов
+    errorMessage = 'Один и тот же хэш-тег не может быть использован дважды'; // сообщение о недопустимости повторения хештегов
+  }
+
+  for (var i = 0; i < hashTags.length; i++) { // цикл проводящий валидацию полученных хештегов
+    var hashTag = hashTags[i]; // создание переменной хранящей отдельно взятый хештег
+    if (hashTag[0] !== '#') { // проверка на наличие решетки на начале хештега
+      errorMessage = 'Хэш-тег должен начинаться с решетки #'; // вывода сообщения об отсутствии решетки в названии хештега
+    } else if (hashTag.length === 1) { // проверка на наличие символов, кроме решетки
+      errorMessage = 'Хеш-тег не может состоять только из одной решётки'; // вывода сообщения об отсутствии остальных символов
+    } else if (hashTag.length > HASH_TAG_LENGTH) { // проверка на длинну отдельного хештега
+      errorMessage = 'Максимальная длина одного хэш-тега 20 символов, включая решётку'; // вывод сообщения об превешении макисальной длинны хештега
+    } else if (hashTag.indexOf('#', 1) > 1) { // проверка на наличие пробелов между хештегами
+      errorMessage = 'Хэштеги должны разделяться пробелами'; // вывод сообщения об отсутсвии пробелов
+    }
+  }
+  if (hashTag === '') { // проверка на отсутсвтие хештегов
+    errorMessage = ''; // в таком случае ошибок нет
+  }
+  hashtagsInput.setCustomValidity(errorMessage); // вывод сообщения о провале валидации формы
+});
+
+// Вариант валидации хештегов
+
+// ------------------------5-й модуль----------------------------------------
+
+var sliderEffectLevel = document.querySelector('.effect-level__pin'); // найти пин слайдера
+var sliderEffectLine = document.querySelector('.effect-level__line'); // найти шкалу применяемого эффекта
+var sliderEffectValue = document.querySelector('.effect-level__value'); //
+var sliderEffectDepth = document.querySelector('.effect-level__depth');
+var preview = document.querySelector('.img-upload__preview');
+var slider = document.querySelector('.effect-level');
+var effectsDirectoryFilter;
+var effectNames = ['none', 'chrome', 'sepia', 'marvin', 'phobos', 'heat'];
+var currentFilter;
+var WIDTH_SCALE = 453; // найти ширину шкалы эффекта
+var BORDERS_OF_BRIGHTNESS = 2 + 1;
+var BORDERS_OF_BLUR = 3;
+var BORDERS_OF_INVERT = 100;
+var EFFECT_LEVEL_MAX = 1;
+var EFFECT_LEVEL_MIN = 0;
+var effectItems = document.querySelectorAll('.effects__radio');
+
+var getNone = function () {
+  slider.classList.add('hidden');
+  for (var i = 1; i < effectNames.length - 1; i++) {
+    effectsDirectory[effectNames[i]](EFFECT_LEVEL_MIN);
+  }
+};
+
+var getChrome = function (grayScale) {
+  preview.style.filter = 'grayscale(' + grayScale + ')';
+};
+
+var getSepia = function (sepia) {
+  preview.style.filter = 'sepia(' + sepia + ')';
+};
+
+var getMarvin = function (invert) {
+  preview.style.filter = 'invert(' + invert * BORDERS_OF_INVERT + '%)';
+};
+
+var getPhobos = function (blur) {
+  preview.style.filter = 'blur(' + blur * BORDERS_OF_BLUR + 'px)';
+};
+
+var getHeat = function (brightness) {
+  preview.style.filter = 'brightness(' + (brightness * BORDERS_OF_BRIGHTNESS) + ')';
+};
+
+// Объект с вызовами фенкций для эффектов
+
+var effectsDirectory = {
+  none: getNone,
+  chrome: getChrome,
+  sepia: getSepia,
+  marvin: getMarvin,
+  phobos: getPhobos,
+  heat: getHeat
+};
+
+// Применения эффекта для изображения
+
+var addEffectListClickHandler = function (effects, effectName) {
+  effects.addEventListener('click', function () {
+    sliderEffectLevel.style.left = 100 + '%';
+    sliderEffectDepth.style.width = 100 + '%';
+    slider.classList.remove('hidden');
+    preview.classList.remove(currentFilter);
+    currentFilter = 'effects__preview--' + effectName;
+    preview.classList.add(currentFilter);
+    effectsDirectoryFilter = effectName;
+    if (effectsDirectoryFilter === 'none') {
+      getNone();
+    } else {
+      effectsDirectory[effectsDirectoryFilter](EFFECT_LEVEL_MAX);
+    }
+  });
+};
+
+for (var i = 0; i < effectItems.length; i++) {
+  addEffectListClickHandler(effectItems[i], effectNames[i]);
+}
+
+// Перетаскивание ползунка
+sliderEffectLevel.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+
+  var startCoords = {
+    x: evt.clientX
+  };
+
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX
+    };
+
+    startCoords = {
+      x: moveEvt.clientX
+    };
+
+    var movePin = sliderEffectLevel.offsetLeft - shift.x;
+    var coordsPin = movePin + 'px';
+
+    if (movePin >= 0 && movePin <= WIDTH_SCALE) {
+      sliderEffectLevel.style.left = coordsPin;
+      sliderEffectDepth.style.width = coordsPin;
+      var effectLevel = sliderEffectLevel.offsetLeft / sliderEffectLine.offsetWidth;
+      effectsDirectory[effectsDirectoryFilter](effectLevel);
+      sliderEffectValue.value = effectLevel * 100;
+    }
+  };
+
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  };
+
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+});
+
+
+// effectLevelLine.addEventListener('click', function () {
+//   effectLevelLine.getBoundingClientRect();
+//   console.log(effectLevelLine.getBoundingClientRect());
+// });
+
+// effectLevelPin.addEventListener('mouseup', function () { // обработчик события отпускания ползунка
+//   var mouseClick = effectLevelLine.getBoundingClientRect().x; // метод возвращающий координаты
+//   console.log(mouseClick);
+//   return mouseClick;
+// });
+
+buttonUploadCancel.addEventListener('click', closeUploadModal); // обработчик закрытия редактора по клику
+  console.log(hashtagsInput);
