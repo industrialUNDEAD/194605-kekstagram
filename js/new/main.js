@@ -62,7 +62,7 @@ var createPostElements = function (postData) {
     embeddedContent.querySelector('.picture__comments').textContent = postData[i].comments.length;
     fragment.appendChild(embeddedContent);
     embeddedContent = null;
-  };
+  }
   return fragment;
 };
 
@@ -91,7 +91,7 @@ var commentsReplace = function (commentsMass) {
     var commentContent = overlayMockComment.querySelector('.social__text');
     commentContent.textContent = commentsMass[i].message;
     fragment.appendChild(overlayMockComment);
-  };
+  }
   removeChildNodes(commentsList.children.length, commentsList);
   return fragment;
 };
@@ -99,7 +99,7 @@ var commentsReplace = function (commentsMass) {
 var removeChildNodes = function (count, parent) {
   for (var i = 0; i < count; i++) {
     parent.children[0].remove();
-  };
+  }
 };
 
 var hiddeElements = function (node) {
@@ -131,8 +131,12 @@ var openEditorPhoto = function () {
 };
 
 var closeEditorPhoto = function () {
-  editorPhoto.classList.add('hidden');
-  uploadButton.value = '';
+  if (hashtagsInput === document.activeElement) { // Что бы находясь в фокусе поля для вода хешетего, по esc не закрывать форму
+    return;
+  } else {
+    editorPhoto.classList.add('hidden');
+    uploadButton.value = '';
+  }
 };
 
 uploadButton.addEventListener('change', openEditorPhoto);
@@ -226,10 +230,9 @@ var hashtagsInput = document.querySelector('.text__hashtags');
 var buttonCloseEditor = document.querySelector('.img-upload__submit');
 
 buttonCloseEditor.addEventListener('click', function () {
-  debugger;
   var hashtagsMass = [];
   hashtagsMass = hashtagsInput.value.split(' ');
-  alignmentHashtagRegister(hashtagsMass); // приведение хештегов пользователя к общему регистру
+  hashtagsMass = alignmentHashtagRegister(hashtagsMass); // приведение хештегов пользователя к общему регистру
   checkHashtags(hashtagsMass);
   console.log(hashtagsMass);
 });
@@ -282,8 +285,11 @@ var checkHashtagDuplicate = function (itemChecked, validHashtags) {
 };
 
 var alignmentHashtagRegister = function (hashtagsCollection) {
+  var transformedData = [];
   for (var i = 0; i < hashtagsCollection.length; i++) {
-    hashtagsCollection[i].toLoverCase();
+    var hashtagBox = hashtagsCollection[i];
+    hashtagBox = hashtagBox.toLowerCase();
+    transformedData.push(hashtagBox);
   }
-  return hashtagsCollection;
+  return transformedData;
 };
