@@ -293,3 +293,40 @@ var alignmentHashtagRegister = function (hashtagsCollection) {
   }
   return transformedData;
 };
+
+
+/////////////////////////////////////перетаскивание//////////////////////////////////////////////
+
+var effectPin = document.querySelector('.effect-level__pin');
+var effectDepth = document.querySelector('.effect-level__depth');
+var effectLine = document.querySelector('.effect-level__line');
+var effectValueInput = document.querySelector('.effect-level__value');
+
+effectPin.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+  var startCoords = {
+    x: evt.clientX
+  };
+
+  var onMouseMove = function (evtMove) {
+    evt.preventDefault();
+    var shift = {
+      x: startCoords.x - evtMove.clientX
+    };
+
+    startCoords = {
+      x: evtMove.clientX
+    };
+
+    effectPin.style.left = (effectPin.offsetLeft - shift.x) + 'px';
+  };
+
+  var onMouseUp = function (evtUp) {
+    evt.preventDefault();
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  };
+
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+})
